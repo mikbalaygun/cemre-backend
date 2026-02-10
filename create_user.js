@@ -5,24 +5,21 @@ const bcrypt = require('bcryptjs')
 const prisma = new PrismaClient()
 
 async function main() {
-    const password = await bcrypt.hash('123123', 10)
+    const username = 'cemre';
+    const passwordPlain = '2026!?';
+    const passwordHash = await bcrypt.hash(passwordPlain, 10);
 
-    // Check if user exists
-    const user = await prisma.user.findFirst({
-        where: { username: 'admin' }
+    // Upsert user: create if not exists, update password if exists
+    const user = await prisma.user.upsert({
+        where: { username },
+        update: { password: passwordHash },
+        create: {
+            username,
+            password: passwordHash
+        }
     });
 
-    if (!user) {
-        await prisma.user.create({
-            data: {
-                username: 'admin',
-                password
-            }
-        })
-        console.log('Admin user created (User: admin, Pass: 123123)')
-    } else {
-        console.log('Admin user already exists.')
-    }
+    console.log(`User '${user.username}' created/updated successfully.`);
 }
 
 main()

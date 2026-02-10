@@ -317,7 +317,7 @@ app.post('/api/mail/send', authMiddleware, async (req, res) => {
             from: process.env.SMTP_USER,
             to: receivers,
             // Check if Cemre has a specific CC address, otherwise use same pattern
-            cc: [testMail, 'kalitekontrol@seyrankoltuk.com.tr'],
+            cc: ['mikbalaygun@gmail.com', 'cemrekalite@gmail.com'],
             subject: req.body.headerText || "Cemre Koltuk Kalite Kontrol Raporu",
             html: `<!DOCTYPE html>
             <html lang="tr">
